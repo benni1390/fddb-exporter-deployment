@@ -1,0 +1,44 @@
+name: package-and-publish-chart
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  package:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set VERSION from tag
+        run: |
+          TAG=${GITHUB_REF#refs/tags/}
+          VERSION=${TAG#v}
+          echo "VERSION=${VERSION}" >> $GITHUB_ENV
+
+      - name: Setup Helm
+        uses: azure/setup-helm@v3
+
+      - name: Helm lint
+        run: helm lint chart/fddb-exporter
+
+      - name: Package chart
+        run: |
+          mkdir -p .charts
+          helm package chart/fddb-exporter \
+            --version "${{ env.VERSION }}" \
+            --app-version "${{ env.VERSION }}" \
+            -d .charts
+
+      - name: Create Helm repo index
+        run: helm repo index .charts --url https://benni1390.github.io/fddb-exporter-deployment
+
+      - name: Publish charts to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          publish_dir: .charts
+          publish_branch: gh-pages
+          github_token: ${{ secrets.GITHUB_TOKEN }}
