@@ -32,6 +32,54 @@ jobs:
         run: |
           helm repo index .charts --url https://benni1390.github.io/fddb-exporter-deployment
 
+      - name: Copy README and values into charts dir
+        run: |
+          cp -f chart/fddb-exporter/README.md .charts/README.md || true
+          cp -f chart/fddb-exporter/values.yaml .charts/values.yaml || true
+
+      - name: Create landing page (index.html)
+        run: |
+          python3 - <<'PY'
+import yaml, html
+from pathlib import Path
+idx = Path('.charts/index.yaml')
+readme_path = Path('chart/fddb-exporter/README.md')
+values_path = Path('chart/fddb-exporter/values.yaml')
+readme = readme_path.read_text() if readme_path.exists() else ''
+values = values_path.read_text() if values_path.exists() else ''
+if idx.exists():
+    d = yaml.safe_load(idx.read_text())
+else:
+    d = {}
+entries = d.get('entries', {})
+versions = []
+for name, items in entries.items():
+    for it in items:
+        ver = it.get('version')
+        url = it.get('urls', [None])[0]
+        created = it.get('created')
+        versions.append((ver, url, created))
+versions.sort(reverse=True)
+lines = []
+lines.append('<!doctype html>')
+lines.append('<html><head><meta charset="utf-8"><title>fddb-exporter Helm repo</title></head><body>')
+lines.append('<h1>fddb-exporter Helm repo</h1>')
+lines.append('<h2>Available versions</h2>')
+if versions:
+    lines.append('<ul>')
+    for v,u,c in versions:
+        lines.append(f'<li><a href="{html.escape(u)}">{html.escape(v)}</a> - {html.escape(str(c))}</li>')
+    lines.append('</ul>')
+else:
+    lines.append('<p>No versions found</p>')
+lines.append('<h2>Chart README</h2>')
+lines.append('<pre style="white-space:pre-wrap;">'+html.escape(readme)+'</pre>')
+lines.append('<h2>values.yaml</h2>')
+lines.append('<pre style="white-space:pre-wrap;">'+html.escape(values)+'</pre>')
+lines.append('</body></html>')
+Path('.charts/index.html').write_text('\n'.join(lines))
+PY
+
       - name: Publish to gh-pages
         uses: peaceiris/actions-gh-pages@v3
         with:
