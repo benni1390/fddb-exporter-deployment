@@ -1,0 +1,32 @@
+replicaCount: 1
+
+image:
+  repository: ghcr.io/benni1390/fddb-exporter
+  tag: "latest"
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 8000
+
+resources:
+  requests:
+    cpu: 50m
+    memory: 64Mi
+  limits:
+    cpu: 200m
+    memory: 128Mi
+
+env:
+  EXPORTER_PORT: "8000"
+  SCRAPE_INTERVAL: "300"
+  FDDB_DATE_OFFSET: "0"
+
+secrets:
+  credentialsSecretName: fddb-credentials
+
+imagePullSecrets: []
+
+serviceMonitor:
+  enabled: true
+  interval: 30s
