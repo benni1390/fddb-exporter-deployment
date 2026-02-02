@@ -9,3 +9,4 @@ secret.yaml
 *.swp
 *.swo
 .DS_Store
+.local/

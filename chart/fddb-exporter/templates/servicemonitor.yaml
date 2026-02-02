@@ -5,6 +5,7 @@ metadata:
   name: {{ include "fddb-exporter.fullname" . }}
   labels:
     app: {{ include "fddb-exporter.name" . }}
+    release: monitoring
 spec:
   selector:
     matchLabels:
