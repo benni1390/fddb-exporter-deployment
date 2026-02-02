@@ -1,0 +1,37 @@
+name: Publish Helm chart to GitHub Pages
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Helm
+        uses: azure/setup-helm@v3
+
+      - name: Package chart
+        run: |
+          mkdir -p .charts
+          helm package chart/fddb-exporter -d .charts
+
+      - name: Create index.yaml
+        run: |
+          helm repo index .charts --url https://benni1390.github.io/fddb-exporter-deployment
+
+      - name: Publish to gh-pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./.charts
