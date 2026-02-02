@@ -5,6 +5,11 @@ on:
     tags:
       - 'v*'
 
+# Give this workflow explicit permissions so the GITHUB_TOKEN can create releases and upload artifacts
+permissions:
+  contents: write
+  packages: write
+
 jobs:
   package-and-release:
     runs-on: ubuntu-latest
