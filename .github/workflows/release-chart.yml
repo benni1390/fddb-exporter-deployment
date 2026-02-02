@@ -12,8 +12,9 @@ permissions:
 jobs:
   package-and-release:
     runs-on: ubuntu-latest
+    # Use CR_PAT (personal access token) for release operations
     env:
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      GITHUB_TOKEN: ${{ secrets.CR_PAT }}
 
     steps:
       - name: Checkout
@@ -32,4 +33,4 @@ jobs:
         with:
           files: .charts/*.tgz
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.CR_PAT }}
