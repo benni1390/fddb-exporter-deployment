@@ -3,18 +3,19 @@
 <h1>fddb-exporter Helm repo</h1>
 <h2>Available versions</h2>
 <ul>
-<li><a href="https://benni1390.github.io/fddb-exporter-deployment/fddb-exporter-0.1.0.tgz">0.1.0</a> - 2026-02-02T16:12:45.661726931Z</li>
+<li><a href="https://benni1390.github.io/fddb-exporter-deployment/fddb-exporter-0.0.13.tgz">0.0.13</a> - 2026-02-03T10:18:36.826601434Z</li>
 </ul>
 <h2>Chart README</h2>
-<pre style="white-space:pre-wrap;">Helm chart for FDDB Prometheus Exporter
+<pre style="white-space:pre-wrap;">Helm chart for FDDB Prometheus exporter
 
 Usage:
 
 ```bash
+# install from local chart folder
 helm install fddb-exporter ./chart/fddb-exporter --namespace monitoring --create-namespace
 ```
 
-Values: see `values.yaml` for configurable options (image, resources, env, secrets).
+See `values.yaml` for configurable options (image, resources, env, secrets).
 </pre>
 <h2>values.yaml</h2>
 <pre style="white-space:pre-wrap;">replicaCount: 1
