@@ -27,7 +27,7 @@ jobs:
           pip install -r requirements.txt
 
       - name: Setup Helm
-        uses: azure/setup-helm@v3
+        uses: azure/setup-helm@v4
 
       - name: Run tests
         run: |
