@@ -14,28 +14,46 @@ helm repo update
 ### Install Chart
 
 ```bash
+# Create namespace
+kubectl create namespace fddb-exporter
+
+# Create secret with credentials
+kubectl create secret generic fddb-credentials \
+  --namespace fddb-exporter \
+  --from-literal=FDDB_USERNAME=your-username \
+  --from-literal=FDDB_PASSWORD=your-password
+
+# Install chart with secret reference
 helm install fddb-exporter benni1390/fddb-exporter \
-  --namespace monitoring --create-namespace \
-  --set env.FDDB_USERNAME=your-username \
-  --set env.FDDB_PASSWORD=your-password
+  --namespace fddb-exporter \
+  --set-string existingSecret=fddb-credentials
 ```
 
 ### Install with Specific Version
 
 ```bash
+# Create namespace if not exists
+kubectl create namespace fddb-exporter
+
+# Create secret if not exists
+kubectl create secret generic fddb-credentials \
+  --namespace fddb-exporter \
+  --from-literal=FDDB_USERNAME=your-username \
+  --from-literal=FDDB_PASSWORD=your-password
+
+# Install with specific versions
 helm install fddb-exporter benni1390/fddb-exporter \
-  --namespace monitoring --create-namespace \
+  --namespace fddb-exporter \
   --version 0.0.13 \
   --set image.tag=0.0.1 \
-  --set env.FDDB_USERNAME=your-username \
-  --set env.FDDB_PASSWORD=your-password
+  --set-string existingSecret=fddb-credentials
 ```
 
 ### Upgrade Existing Installation
 
 ```bash
 helm upgrade fddb-exporter benni1390/fddb-exporter \
-  --namespace monitoring \
+  --namespace fddb-exporter \
   --version 0.0.13 \
   --set image.tag=0.0.1
 ```
@@ -73,21 +91,19 @@ serviceMonitor:
 
 ### Using Secrets
 
-For production, use Kubernetes secrets instead of plain values:
+Credentials are provided via Kubernetes secrets:
 
 ```bash
 # Create secret
 kubectl create secret generic fddb-credentials \
-  --namespace monitoring \
-  --from-literal=username=your-username \
-  --from-literal=password=your-password
+  --namespace fddb-exporter \
+  --from-literal=FDDB_USERNAME=your-username \
+  --from-literal=FDDB_PASSWORD=your-password
 
-# Reference in values
+# Install with secret reference
 helm install fddb-exporter benni1390/fddb-exporter \
-  --namespace monitoring \
-  --set env.FDDB_USERNAME="" \
-  --set env.FDDB_PASSWORD="" \
-  --set existingSecret=fddb-credentials
+  --namespace fddb-exporter \
+  --set-string existingSecret=fddb-credentials
 ```
 
 See `secret.yaml.example` for more details.
@@ -115,20 +131,20 @@ If you get image pull errors from ghcr.io:
 
 ```bash
 # Check pod status
-kubectl get pods -n monitoring
+kubectl get pods -n fddb-exporter
 
 # View logs
-kubectl logs -n monitoring -l app=fddb-exporter -f
+kubectl logs -n fddb-exporter -l app=fddb-exporter -f
 
 # Describe pod
-kubectl describe pod -n monitoring -l app=fddb-exporter
+kubectl describe pod -n fddb-exporter -l app=fddb-exporter
 ```
 
 ### Metrics Not Available
 
 ```bash
 # Port forward to test locally
-kubectl port-forward -n monitoring svc/fddb-exporter 8000:8000
+kubectl port-forward -n fddb-exporter svc/fddb-exporter 8000:8000
 
 # Test metrics endpoint
 curl http://localhost:8000/metrics
@@ -137,7 +153,7 @@ curl http://localhost:8000/metrics
 ## Uninstall
 
 ```bash
-helm uninstall fddb-exporter --namespace monitoring
+helm uninstall fddb-exporter --namespace fddb-exporter
 ```
 
 ---
