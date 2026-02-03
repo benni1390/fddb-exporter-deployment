@@ -1,6 +1,6 @@
 services:
   test:
-    image: python:3.11-slim
+    image: python:3.11.11-slim
     volumes:
       - .:/workspace
       - /var/run/docker.sock:/var/run/docker.sock
