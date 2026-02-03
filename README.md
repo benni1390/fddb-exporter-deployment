@@ -1,6 +1,6 @@
 # fddb-exporter Helm Chart
 
-Official Helm chart for deploying the FDDB Prometheus exporter to Kubernetes.
+Helm chart for deploying the FDDB Prometheus exporter to Kubernetes.
 
 ## Installation
 
