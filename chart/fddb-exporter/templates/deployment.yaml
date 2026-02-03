@@ -58,12 +58,12 @@ spec:
         livenessProbe:
           httpGet:
             path: /metrics
-            port: {{ .Values.service.port }}
+            port: metrics
           initialDelaySeconds: 30
           periodSeconds: 30
         readinessProbe:
           httpGet:
             path: /metrics
-            port: {{ .Values.service.port }}
+            port: metrics
           initialDelaySeconds: 10
           periodSeconds: 10
