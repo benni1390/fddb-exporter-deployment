@@ -26,7 +26,7 @@ helm install fddb-exporter benni1390/fddb-exporter \
 helm install fddb-exporter benni1390/fddb-exporter \
   --namespace monitoring --create-namespace \
   --version 0.0.13 \
-  --set image.tag=0.1.0 \
+  --set image.tag=0.0.1 \
   --set env.FDDB_USERNAME=your-username \
   --set env.FDDB_PASSWORD=your-password
 ```
@@ -37,7 +37,7 @@ helm install fddb-exporter benni1390/fddb-exporter \
 helm upgrade fddb-exporter benni1390/fddb-exporter \
   --namespace monitoring \
   --version 0.0.13 \
-  --set image.tag=0.1.0
+  --set image.tag=0.0.1
 ```
 
 ## Configuration
@@ -54,7 +54,7 @@ helm show values benni1390/fddb-exporter --version 0.0.13
 # values.yaml
 image:
   repository: ghcr.io/benni1390/fddb-exporter
-  tag: "0.1.0"
+  tag: "0.0.1"
   pullPolicy: IfNotPresent
 
 env:
@@ -108,7 +108,7 @@ serviceMonitor:
 
 If you get image pull errors from ghcr.io:
 - Check if image is public
-- Verify image tag exists: `docker pull ghcr.io/benni1390/fddb-exporter:0.1.0`
+- Verify image tag exists: `docker pull ghcr.io/benni1390/fddb-exporter:0.0.1`
 - Supply ImagePullSecrets if needed
 
 ### No Logs Visible
