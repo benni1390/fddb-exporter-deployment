@@ -1,0 +1,15 @@
+{{- if .Values.prometheusRule.enabled }}
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: fddb-daily-last
+  labels:
+    release: monitoring
+spec:
+  groups:
+  - name: daily_energy
+    interval: 1m
+    rules:
+    - record: fddb_energy_kcal_last
+      expr: last_over_time
+{{- end }}
