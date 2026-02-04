@@ -9,6 +9,7 @@
   "labels": ["dependencies"],
   "rangeStrategy": "pin",
   "separateMajorMinor": true,
+  "dependencyDashboardApproval": false,
   "helm-values": {
     "fileMatch": ["^chart/.+/values\\.yaml$"]
   },
