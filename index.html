@@ -1,54 +1,11 @@
 <!doctype html>
-<html><head><meta charset="utf-8"><title>fddb-exporter Helm repo</title></head><body>
-<h1>fddb-exporter Helm repo</h1>
-<h2>Available versions</h2>
-<ul>
-<li><a href="https://benni1390.github.io/fddb-exporter-deployment/fddb-exporter-0.0.13.tgz">0.0.13</a> - 2026-02-03T10:18:36.826601434Z</li>
-</ul>
-<h2>Chart README</h2>
-<pre style="white-space:pre-wrap;">Helm chart for FDDB Prometheus exporter
-
-Usage:
-
-```bash
-# install from local chart folder
-helm install fddb-exporter ./chart/fddb-exporter --namespace monitoring --create-namespace
-```
-
-See `values.yaml` for configurable options (image, resources, env, secrets).
-</pre>
-<h2>values.yaml</h2>
-<pre style="white-space:pre-wrap;">replicaCount: 1
-
-image:
-  repository: ghcr.io/benni1390/fddb-exporter
-  tag: &quot;latest&quot;
-  pullPolicy: IfNotPresent
-
-service:
-  type: ClusterIP
-  port: 8000
-
-resources:
-  requests:
-    cpu: 50m
-    memory: 64Mi
-  limits:
-    cpu: 200m
-    memory: 128Mi
-
-env:
-  EXPORTER_PORT: &quot;8000&quot;
-  SCRAPE_INTERVAL: &quot;300&quot;
-  FDDB_DATE_OFFSET: &quot;0&quot;
-
-secrets:
-  credentialsSecretName: fddb-credentials
-
-imagePullSecrets: []
-
-serviceMonitor:
-  enabled: true
-  interval: 30s
-</pre>
-</body></html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="refresh" content="0; url=https://github.com/benni1390/fddb-exporter-deployment">
+  <title>Redirecting to fddb-exporter-deployment</title>
+</head>
+<body>
+  <p>Redirecting to <a href="https://github.com/benni1390/fddb-exporter-deployment">GitHub Repository</a>...</p>
+</body>
+</html>
