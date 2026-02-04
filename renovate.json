@@ -9,6 +9,9 @@
   "labels": ["dependencies"],
   "rangeStrategy": "pin",
   "separateMajorMinor": true,
+  "helm-values": {
+    "fileMatch": ["^chart/.+/values\\.yaml$"]
+  },
   "packageRules": [
     {
       "matchManagers": ["pip_requirements"],
@@ -17,6 +20,11 @@
     {
       "matchManagers": ["helm-values", "helmv3"],
       "groupName": "helm chart dependencies"
+    },
+    {
+      "matchDatasources": ["docker"],
+      "matchPackageNames": ["ghcr.io/benni1390/fddb-exporter"],
+      "groupName": "fddb-exporter docker image"
     }
   ]
 }
