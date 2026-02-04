@@ -10,7 +10,7 @@
   "rangeStrategy": "pin",
   "separateMajorMinor": true,
   "helm-values": {
-    "fileMatch": ["^chart/.+/values\\.yaml$"]
+    "fileMatch": ["^chart/.+/values\\.yaml$", "^chart/.+/Chart\\.yaml$"]
   },
   "packageRules": [
     {
