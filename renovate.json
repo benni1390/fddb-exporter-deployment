@@ -1,0 +1,22 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:recommended"
+  ],
+  "schedule": [
+    "before 4am on monday"
+  ],
+  "labels": ["dependencies"],
+  "rangeStrategy": "pin",
+  "separateMajorMinor": true,
+  "packageRules": [
+    {
+      "matchManagers": ["pip_requirements"],
+      "groupName": "python dependencies"
+    },
+    {
+      "matchManagers": ["helm-values", "helmv3"],
+      "groupName": "helm chart dependencies"
+    }
+  ]
+}
