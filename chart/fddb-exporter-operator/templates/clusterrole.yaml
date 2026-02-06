@@ -1,0 +1,19 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: {{ include "fddb-exporter-operator.fullname" . }}-role
+  labels:
+    {{- include "fddb-exporter-operator.labels" . | nindent 4 }}
+rules:
+- apiGroups: ["fddb.benni1390.github.io"]
+  resources: ["fddbexporters"]
+  verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+- apiGroups: ["fddb.benni1390.github.io"]
+  resources: ["fddbexporters/status"]
+  verbs: ["get", "update", "patch"]
+- apiGroups: [""]
+  resources: ["namespaces", "secrets", "services", "pods"]
+  verbs: ["get", "list", "watch"]
+- apiGroups: ["apps"]
+  resources: ["deployments"]
+  verbs: ["get", "list", "watch"]

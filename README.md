@@ -1,6 +1,11 @@
-# fddb-exporter Helm Chart
+# FDDB Helm Charts
 
-Helm chart for deploying the FDDB Prometheus exporter to Kubernetes.
+Helm charts for deploying FDDB components to Kubernetes.
+
+## Available Charts
+
+- **fddb-exporter** - FDDB Prometheus exporter
+- **fddb-exporter-operator** - Kubernetes operator for automated FDDB Exporter deployment
 
 ## Installation
 
@@ -12,6 +17,8 @@ helm repo update
 ```
 
 ### Install Chart
+
+#### FDDB Exporter
 
 ```bash
 # Create namespace
@@ -27,6 +34,18 @@ kubectl create secret generic fddb-credentials \
 helm install fddb-exporter benni1390/fddb-exporter \
   --namespace fddb-exporter \
   --set-string existingSecret=fddb-credentials
+```
+
+#### FDDB Exporter Operator
+
+```bash
+# Install CRD first
+kubectl apply -f https://raw.githubusercontent.com/benni1390/fddb-exporter-operator/main/deploy/crds/fddbexporter_crd.yaml
+
+# Install operator
+kubectl create namespace fddb-operator-system
+helm install fddb-operator benni1390/fddb-exporter-operator \
+  --namespace fddb-operator-system
 ```
 
 ### Install with Specific Version

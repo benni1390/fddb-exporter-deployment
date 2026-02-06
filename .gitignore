@@ -10,3 +10,7 @@ secret.yaml
 *.swo
 .DS_Store
 .local/
+
+# Local development files
+.local/
+.github/copilot-instructions.md
