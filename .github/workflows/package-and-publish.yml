@@ -5,7 +5,7 @@ on:
     branches:
       - main
     paths:
-      - 'chart/fddb-exporter/Chart.yaml'
+      - 'chart/**/Chart.yaml'
   workflow_dispatch:
 
 permissions:
@@ -26,36 +26,31 @@ jobs:
       - name: Setup Helm
         uses: azure/setup-helm@v4
 
-      - name: Get chart version
-        id: chart_version
+      - name: Get changed charts
+        id: changed_charts
         run: |
-          VERSION=$(grep '^version:' chart/fddb-exporter/Chart.yaml | awk '{print $2}')
-          echo "version=$VERSION" >> $GITHUB_OUTPUT
-          echo "Chart version: $VERSION"
-
-      - name: Check if tag exists
-        id: check_tag
-        run: |
-          if git rev-parse "v${{ steps.chart_version.outputs.version }}" >/dev/null 2>&1; then
-            echo "exists=true" >> $GITHUB_OUTPUT
-            echo "Tag v${{ steps.chart_version.outputs.version }} already exists"
-          else
-            echo "exists=false" >> $GITHUB_OUTPUT
-            echo "Tag v${{ steps.chart_version.outputs.version }} does not exist"
-          fi
+          CHARTS=$(ls -d chart/*/ | xargs -n1 basename)
+          echo "charts<<EOF" >> $GITHUB_OUTPUT
+          echo "$CHARTS" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+          echo "Charts to process: $CHARTS"
 
       - name: Helm lint
-        if: steps.check_tag.outputs.exists == 'false'
-        run: helm lint chart/fddb-exporter
+        run: |
+          for chart in chart/*/; do
+            echo "Linting $chart"
+            helm lint "$chart"
+          done
 
-      - name: Package chart
-        if: steps.check_tag.outputs.exists == 'false'
+      - name: Package charts
         run: |
           mkdir -p .charts
-          helm package chart/fddb-exporter -d .charts
+          for chart in chart/*/; do
+            echo "Packaging $chart"
+            helm package "$chart" -d .charts
+          done
 
       - name: Create index and landing page
-        if: steps.check_tag.outputs.exists == 'false'
         run: |
           helm repo index .charts --url https://benni1390.github.io/fddb-exporter-deployment
           python3 - <<'PY'
@@ -75,37 +70,8 @@ jobs:
           PY
 
       - name: Publish to gh-pages
-        if: steps.check_tag.outputs.exists == 'false'
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./.charts
 
-      - name: Create git tag
-        if: steps.check_tag.outputs.exists == 'false'
-        run: |
-          git config user.name "$GITHUB_ACTOR"
-          git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
-          git tag -a "v${{ steps.chart_version.outputs.version }}" -m "Release v${{ steps.chart_version.outputs.version }}"
-          git push origin "v${{ steps.chart_version.outputs.version }}"
-
-      - name: Create GitHub Release
-        if: steps.check_tag.outputs.exists == 'false'
-        uses: softprops/action-gh-release@v2
-        with:
-          tag_name: v${{ steps.chart_version.outputs.version }}
-          name: Release v${{ steps.chart_version.outputs.version }}
-          body: |
-            Helm Chart Release v${{ steps.chart_version.outputs.version }}
-            
-            ## Installation
-            ```bash
-            helm repo add fddb-exporter https://benni1390.github.io/fddb-exporter-deployment
-            helm repo update
-            helm install fddb-exporter fddb-exporter/fddb-exporter --version ${{ steps.chart_version.outputs.version }}
-            ```
-          files: .charts/*.tgz
-          draft: false
-          prerelease: false
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
