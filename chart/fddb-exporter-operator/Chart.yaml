@@ -2,5 +2,5 @@ apiVersion: v2
 name: fddb-exporter-operator
 description: Kubernetes operator for automated FDDB Exporter deployment
 type: application
-version: 0.0.3
+version: 0.0.4
 appVersion: "0.0.1"
