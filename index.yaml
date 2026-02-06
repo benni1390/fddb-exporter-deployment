@@ -3,12 +3,23 @@ entries:
   fddb-exporter:
   - apiVersion: v2
     appVersion: 0.0.1
-    created: "2026-02-04T13:53:20.559531378Z"
+    created: "2026-02-06T20:44:20.236048481Z"
     description: Helm chart for FDDB Prometheus Exporter
-    digest: 9765b3cb97a9780ef1feecf038730b15d99dbd3ec48be008db928ea4150a6b83
+    digest: cc00bf9d31829710a444f02eb7cc089619a17d13469d112413964110ae8bd2bd
     name: fddb-exporter
     type: application
     urls:
     - https://benni1390.github.io/fddb-exporter-deployment/fddb-exporter-0.0.14.tgz
     version: 0.0.14
-generated: "2026-02-04T13:53:20.559047319Z"
+  fddb-exporter-operator:
+  - apiVersion: v2
+    appVersion: 0.0.1
+    created: "2026-02-06T20:44:20.236339705Z"
+    description: Kubernetes operator for automated FDDB Exporter deployment
+    digest: 02437ce4b1e5b464b26a2c0c498d06459060b3cf1f0c0e52f56e013e9cc7d9e3
+    name: fddb-exporter-operator
+    type: application
+    urls:
+    - https://benni1390.github.io/fddb-exporter-deployment/fddb-exporter-operator-0.0.4.tgz
+    version: 0.0.4
+generated: "2026-02-06T20:44:20.235697855Z"
